@@ -13,14 +13,14 @@ public extension UIColor {
         )
     }
 
-    /// Bilibili 品牌粉色
-    static let bd_pink = UIColor(hex: 0xFB7299)
+    /// 主颜色（宿主 App 可通过重新赋值覆盖）
+    nonisolated(unsafe) static var aox_tint = UIColor.systemPink
     /// 主文字色
-    static let bd_text = UIColor.label
+    static let aox_text = UIColor.label
     /// 次要文字色
-    static let bd_textSecondary = UIColor.secondaryLabel
+    static let aox_textSecondary = UIColor.secondaryLabel
     /// 分割线颜色
-    static let bd_separator = UIColor.separator
+    static let aox_separator = UIColor.separator
     /// 背景色
-    static let bd_background = UIColor.systemBackground
+    static let aox_background = UIColor.systemBackground
 }

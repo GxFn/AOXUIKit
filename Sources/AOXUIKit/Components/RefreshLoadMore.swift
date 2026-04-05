@@ -17,7 +17,7 @@ public final class RefreshHeader {
     public init(scrollView: UIScrollView) {
         self.refreshControl = UIRefreshControl()
         self.scrollView = scrollView
-        refreshControl.tintColor = .bd_pink
+        refreshControl.tintColor = .aox_tint
         scrollView.refreshControl = refreshControl
 
         refreshControl.rx.controlEvent(.valueChanged)
