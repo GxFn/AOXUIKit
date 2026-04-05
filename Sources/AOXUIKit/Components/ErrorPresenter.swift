@@ -32,7 +32,7 @@ public enum ErrorPresenter {
             break
         }
 
-        Logger.app.error("ErrorPresenter [\(String(describing: level))]: \(error.localizedDescription)")
+        UIKitLogger.app.error("ErrorPresenter [\(String(describing: level))]: \(error.localizedDescription)")
     }
 
     /// 获取当前最顶层的 ViewController
