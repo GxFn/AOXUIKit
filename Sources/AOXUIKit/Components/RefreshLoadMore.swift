@@ -55,12 +55,19 @@ public final class LoadMoreFooter {
                 return maxOffset > 0 && offset.y > maxOffset - threshold
             }
             .distinctUntilChanged()
-            .filter { $0 }
+            // 进入加载中就置位并放行一次；未调用 endLoading() 前不再重复触发，
+            // 避免同一次加载在到达底部区间内被多次触发（旧实现 isLoading 从未被置位，形同虚设）。
+            .filter { [weak self] shouldLoad -> Bool in
+                guard let self, shouldLoad, !self.isLoading else { return false }
+                self.isLoading = true
+                return true
+            }
             .map { _ in () }
             .bind(to: loadMoreSubject)
             .disposed(by: disposeBag)
     }
 
+    /// 加载完成后调用，允许下一次上拉加载触发
     public func endLoading() {
         isLoading = false
     }
