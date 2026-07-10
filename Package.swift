@@ -25,5 +25,10 @@ let package = Package(
             ],
             path: "Sources/AOXUIKit"
         ),
+        .testTarget(
+            name: "AOXUIKitTests",
+            dependencies: ["AOXUIKit"],
+            path: "Tests/AOXUIKitTests"
+        ),
     ]
 )

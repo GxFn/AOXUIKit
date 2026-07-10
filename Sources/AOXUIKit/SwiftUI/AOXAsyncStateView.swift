@@ -31,9 +31,11 @@ public struct AOXAsyncStateView<Content: View>: View {
             VStack(spacing: AOXSpacing.medium) {
                 ProgressView()
                     .tint(AOXColor.tint)
+                    .accessibilityLabel("正在加载内容")
                 Text("正在加载…")
                     .font(.footnote)
                     .foregroundStyle(AOXColor.secondaryText)
+                    .accessibilityHidden(true)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
@@ -60,16 +62,20 @@ public struct AOXAsyncStateView<Content: View>: View {
     private func stateMessage(systemImage: String, title: String, retryTitle: String) -> some View {
         VStack(spacing: AOXSpacing.medium) {
             Image(systemName: systemImage)
-                .font(.system(size: 28, weight: .regular))
+                .font(.title2)
                 .foregroundStyle(AOXColor.secondaryText)
+                .accessibilityHidden(true)
             Text(title)
                 .font(.callout)
                 .foregroundStyle(AOXColor.secondaryText)
                 .multilineTextAlignment(.center)
+                .accessibilityLabel(title)
             if let retry {
                 Button(retryTitle, action: retry)
                     .buttonStyle(.borderedProminent)
                     .tint(AOXColor.tint)
+                    .aoxMinimumInteractiveSize()
+                    .accessibilityHint("重新请求当前页面内容")
             }
         }
         .padding(AOXSpacing.xLarge)

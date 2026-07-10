@@ -1,0 +1,48 @@
+name: iOS CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+
+jobs:
+  test:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - name: Checkout AOXUIKit
+        uses: actions/checkout@v4
+        with:
+          path: AOXUIKit
+      - name: Checkout sibling AOXFoundationKit
+        uses: actions/checkout@v4
+        with:
+          repository: GxFn/AOXFoundationKit
+          # Package.swift 使用 ../AOXFoundationKit，本地路径依赖不会进入 Package.resolved。
+          ref: f3ada9f5246c2b12aac4c7a60aeb719b2c5ddc31
+          path: AOXFoundationKit
+      - name: Verify Swift 6 toolchain and lockfile
+        working-directory: AOXUIKit
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          swift --version
+          test "$(xcodebuild -version | awk 'NR == 1 { split($2, v, "."); print v[1] }')" -ge 16
+          test "$(swift --version | awk '/Apple Swift version/ { split($4, v, "."); print v[1] }')" -ge 6
+          test -f Package.resolved
+      - name: Test AOXUIKit
+        working-directory: AOXUIKit
+        run: >-
+          xcodebuild
+          -scheme AOXUIKit
+          -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest'
+          -onlyUsePackageVersionsFromResolvedFile
+          CODE_SIGNING_ALLOWED=NO
+          test
+      - name: Verify resolution stayed locked
+        working-directory: AOXUIKit
+        run: git diff --exit-code -- Package.resolved

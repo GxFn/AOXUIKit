@@ -5,6 +5,7 @@ import RxCocoa
 // MARK: - Refresh Header
 
 /// 下拉刷新头部视图
+@MainActor
 public final class RefreshHeader {
     private weak var scrollView: UIScrollView?
     private let refreshSubject = PublishSubject<Void>()
@@ -34,6 +35,7 @@ public final class RefreshHeader {
 // MARK: - Load More Footer
 
 /// 上拉加载更多检测
+@MainActor
 public final class LoadMoreFooter {
     private let loadMoreSubject = PublishSubject<Void>()
     private let disposeBag = DisposeBag()

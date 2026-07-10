@@ -14,7 +14,8 @@ public extension UIColor {
     }
 
     /// 主颜色（宿主 App 可通过重新赋值覆盖）
-    nonisolated(unsafe) static var aox_tint = UIColor.systemPink
+    /// 主题色只允许在 UI 主线程配置和读取，避免可变全局颜色绕过 Swift 6 数据竞争检查。
+    @MainActor static var aox_tint = UIColor.systemPink
     /// 主文字色
     static let aox_text = UIColor.label
     /// 次要文字色
