@@ -9,7 +9,10 @@ public final class PaddingLabel: UILabel {
 
     /// 文字四周内边距
     public var textInsets = UIEdgeInsets(top: 1.5, left: 5, bottom: 1.5, right: 5) {
-        didSet { invalidateIntrinsicContentSize() }
+        didSet {
+            invalidateIntrinsicContentSize()
+            setNeedsDisplay()
+        }
     }
 
     public override func drawText(in rect: CGRect) {
@@ -21,7 +24,12 @@ public final class PaddingLabel: UILabel {
     }
 
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
-        padded(super.sizeThatFits(size))
+        // 传给 UILabel 的是扣除内边距后的排版空间；否则多行文本少换一行，绘制时被裁切。
+        let contentSize = CGSize(
+            width: max(0, size.width - textInsets.left - textInsets.right),
+            height: max(0, size.height - textInsets.top - textInsets.bottom)
+        )
+        return padded(super.sizeThatFits(contentSize))
     }
 
     private func padded(_ size: CGSize) -> CGSize {
